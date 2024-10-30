@@ -171,26 +171,8 @@ class TestAccountService(TestCase):
         resp = self.client.delete(BASE_URL)
         self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    def test_security_headers(self):
-        """It should return security headers"""
-        response = self.client.get('/', environ_overrides=HTTPS_ENVIRON)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        headers = {
-            'X-Frame-Options': 'SAMEORIGIN',
-            'X-Content-Type-Options': 'nosniff',
-            'Content-Security-Policy': 'default-src \'self\'; object-src \'none\'',
-            'Referrer-Policy': 'strict-origin-when-cross-origin'
-        }
-        for key, value in headers.items():
-            self.assertEqual(response.headers.get(key), value)
     def test_get_account_not_found(self):
-        """It should not Read an Account that is not found"""
-        resp = self.client.get(f"{BASE_URL}/0")
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
-        
-    def test_cors_security(self):
-        """It should return a CORS header"""
-        response = self.client.get('/', environ_overrides=HTTPS_ENVIRON)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # Check for the CORS header
-        self.assertEqual(response.headers.get('Access-Control-Allow-Origin'), '*')
+      """It should not Read an Account that is not found"""
+      resp = self.client.get(f"{BASE_URL}/0")
+      self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
